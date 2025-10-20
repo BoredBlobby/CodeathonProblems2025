@@ -42,22 +42,36 @@ public class markovChain {
         private String[] myWords;
         private Random myRandom;
         private int myOrder;
-
-        public markovWord(String[] source, int start, int size) {
-            myWords = new String[size];
+    // source: text to train on
+    // start: where to start in source
+    // size: how many words to include
+        public markovWord(int order) {
+            myRandom = new Random();
+            myOrder = order;
         }
 
         public void setRandom(int seed) {
             myRandom = new Random(seed);
         }
 
-        public String getRandomText(int numWords) { //Not finished
+        public void setTraining(String text) {
+            myWords = text.split("\\s+");
+        }
+
+        /*Gnerates random text with the specified number of words */
+        public String getRandomText(int numWords) { //Not finished; uses getFollows and indexOf
             StringBuilder sb = new StringBuilder();
             return sb.toString().trim();
         }
 
-        public void setTraining(String text) {
-            myWords = text.split("\\s+");
+        private int indexOf(String[] words, String target, int start) {
+            for (int k = start; k < words.length; k++) {
+                WordGram wg = new WordGram(words, k, target.length());
+                if (words[k].equals(target)) {
+                    return k;
+                }
+            }
+            return -1;
         }
     }
 
@@ -67,5 +81,15 @@ public class markovChain {
         public void setRandom(int seed);
 
         public String getRandomText(int numWords);
+    }
+
+    public class WordGram {
+        private String[] myWords;
+        private int myHash;
+
+        public WordGram(String[] words, int index, int size) {
+            myWords = new String[size];
+            System.arraycopy(words, index, myWords, 0, size);
+        }
     }
 }
